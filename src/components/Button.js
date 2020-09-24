@@ -7,7 +7,8 @@ const style = StyleSheet.create({
         backgroundColor: 'white',
         borderColor: '#007aff',
         borderRadius: 5,
-        borderWidth: 1
+        borderWidth: 1,
+        marginTop: 1
     },
     text: {
         alignSelf: 'center',
