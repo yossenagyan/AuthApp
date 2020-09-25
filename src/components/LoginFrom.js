@@ -6,22 +6,35 @@ import Card from './Card';
 import CardSection from './CardSection';
 import Button from './Button';
 import Input from './Input';
+import Spinner from './Spinner'
 
 class LoginFrom extends Component {
     state = {
         email:'',
         password: '',
-        error: 'TEST INI ERROR'
+        error: '',
+        loading: false,
+    }
+
+    onLoginSuccess(result) {
+        console.log('Berhasil', result);
+        this.setState({
+        email:'',
+        password: '',
+        error: '',
+        loading: false,
+        })
     }
     onButtonPress() {
         const {email, password} = this.state
         console.log('Processing login...');
 
-        this.setState({error: ''})
+        this.setState({error:'', loading: true})
         
         firebase.auth().signInWithEmailAndPassword(email, password)
         .then((result)=>{
-            console.log('Berhasil', result);
+            this.onLoginSuccess(result)
+            this.setState({loading:false})
         })
         .catch((error) =>{
             console.log('Gagal', error.code, error.message);
@@ -29,19 +42,30 @@ class LoginFrom extends Component {
                 console.log('Registering user...');
                 firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((result2) => {
-                    console.log('Berhasil', result2);
+                    this.onLoginSuccess(result2)
+                    this.setState({loading:false})
                 })
                 .catch((error2) => {
                     console.log('Gagal', error2.code, error2.message);
-                    this.setState({error: error2.message})
+                    this.setState({error: error2.message, loading:false})
+                    
                 })
             } else {
-                this.setState({error: error.message})
+                this.setState({error: error.message, loading:false})
             }
         })
         
     }
-
+    renderButton () {
+        if (this.state.loading) {
+            return <Spinner/>
+        }
+        return (
+        <Button onPress= { () => this.onButtonPress() }>
+            Login
+        </Button>
+        )
+    }
     render() { 
         return ( 
             <Card>
@@ -64,9 +88,7 @@ class LoginFrom extends Component {
                     {this.state.error}
                 </Text>
                 <CardSection>
-                    <Button onPress={() => this.onButtonPress()}>
-                        Login
-                    </Button>
+                    {this.renderButton()} 
                 </CardSection>
             </Card>
          );
