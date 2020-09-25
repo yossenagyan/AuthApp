@@ -16,7 +16,7 @@ class  App extends Component {
   render() { 
     return ( 
       <View>
-      <Header title='Authentication'></Header>
+      <Header title='Sign In'></Header>
       <LoginFrom></LoginFrom>
       </View>
      );
