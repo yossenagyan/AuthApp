@@ -29,6 +29,15 @@ class LoginFrom extends Component {
         const {email, password} = this.state
         console.log('Processing login...');
 
+        if(!email) {
+            this.setState({error: 'Email is required'})
+            return
+        }
+        if(!password) {
+            this.setState({error: 'Password is required'})
+            return
+        }
+
         this.setState({error:'', loading: true})
         
         firebase.auth().signInWithEmailAndPassword(email, password)
